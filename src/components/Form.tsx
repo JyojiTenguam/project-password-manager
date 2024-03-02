@@ -16,24 +16,31 @@ type FormProps = {
 function Form() {
   const [isButtonVisible, setIsButtonVisible] = useState(true);
   const [isFormVisible, setIsFormVisible] = useState(true);
-
+  const [serviceName, setServiceName] = useState("");
+  const [login, setLogin] = useState("");
+  const [password, setPassword] = useState("");
+  const [url, setUrl] = useState("");
+  const hasNumber = /\d/.test(password);
+  const hasLetter = /[a-zA-Z]/.test(password);
+  const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+  const hasValidLength = password.length >= 8 && password.length <= 16;
   return (
     <>
       {isFormVisible && (
         <form>
           <label htmlFor="service-name">Nome do Serviço</label>
-          <input id="service-name" type="text" />
+          <input id="service-name" type="text" onChange={data => setServiceName(data.target.value)} />
 
           <label htmlFor="login">Login</label>
-          <input id="login" type="text" />
+          <input id="login" type="text" onChange={data => setLogin(data.target.value)} />
 
           <label htmlFor="password">Senha</label>
-          <input id="password" type="password" />
+          <input id="password" type="password" onChange={data => setPassword(data.target.value) } />
 
           <label htmlFor="url">URL</label>
-          <input id="url" type="text" />
+          <input id="url" type="text" onChange={data => setUrl(data.target.value)} />
 
-          <button>Cadastrar</button>
+          <button disabled={!serviceName || !login || !password || !url || !hasValidLength ||!hasNumber || !hasLetter || !hasSpecialChar}>Cadastrar</button>
           <button onClick={() => {
             setIsFormVisible(false);
             setIsButtonVisible(true);
