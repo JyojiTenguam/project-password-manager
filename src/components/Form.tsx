@@ -35,12 +35,26 @@ function Form() {
           <input id="login" type="text" onChange={data => setLogin(data.target.value)} />
 
           <label htmlFor="password">Senha</label>
-          <input id="password" type="password" onChange={data => setPassword(data.target.value) } />
+          <input id="password" type="password" onChange={data => setPassword(data.target.value)} />
+          <div>
+            <p className={hasValidLength ? 'valid-password-check' : 'invalid-password-check'}>
+              Possuir 8 ou mais caracteres
+            </p>
+            <p className={hasValidLength ? 'valid-password-check' : 'invalid-password-check'}>
+              Possuir até 16 caracteres
+            </p>
+            <p className={hasNumber && hasLetter ? 'valid-password-check' : 'invalid-password-check'}>
+              Possuir letras e números
+            </p>
+            <p className={hasSpecialChar ? 'valid-password-check' : 'invalid-password-check'}>
+              Possuir algum caractere especial
+            </p>
+          </div>
 
           <label htmlFor="url">URL</label>
           <input id="url" type="text" onChange={data => setUrl(data.target.value)} />
 
-          <button disabled={!serviceName || !login || !password || !url || !hasValidLength ||!hasNumber || !hasLetter || !hasSpecialChar}>Cadastrar</button>
+          <button disabled={!serviceName || !login || !password || !url || !hasValidLength || !hasNumber || !hasLetter || !hasSpecialChar}>Cadastrar</button>
           <button onClick={() => {
             setIsFormVisible(false);
             setIsButtonVisible(true);
