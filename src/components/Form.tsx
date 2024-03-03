@@ -59,17 +59,22 @@ function Form() {
                 url: url
               };
               setServices([...services, newService]);
+              setServiceName('');
+              setLogin('');
+              setPassword('');
+              setUrl('');
               setIsFormVisible(false);
               setIsButtonVisible(true);
             }}
           >Cadastrar</button>
+
           <button onClick={() => {
             setServiceName('');
             setLogin('');
             setPassword('');
             setUrl('');
-            setIsFormVisible(true);
-            setIsButtonVisible(false);
+            setIsFormVisible(false);
+            setIsButtonVisible(true);
           }}>Cancelar</button>
         </form>
       )}
