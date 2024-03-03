@@ -4,12 +4,6 @@ type FormProps = {
   handleInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void; // * funcao que recebe event e retorna nada
   handleInputFocus: (event: React.FocusEvent<HTMLInputElement>) => void; // * funcao que recebe event e retorna nada
   handleSendBtnClick: (event: React.MouseEvent<HTMLButtonElement>) => void; // * funcao que recebe event e retorna nada
-  data: { // * objeto
-    'service-name': string;
-    login: string;
-    password: string;
-    url: string;
-  };
   validateForm: () => boolean; // * funcao que recebe nada e retorna true ou false (boolean)
 };
 
@@ -24,6 +18,7 @@ function Form() {
   const hasLetter = /[a-zA-Z]/.test(password);
   const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
   const hasValidLength = password.length >= 8 && password.length <= 16;
+  const [services, setServices] = useState<{ 'service-name': string; login: string; password: string; url: string; }[]>([]);
   return (
     <>
       {isFormVisible && (
@@ -54,16 +49,49 @@ function Form() {
           <label htmlFor="url">URL</label>
           <input id="url" type="text" onChange={data => setUrl(data.target.value)} />
 
-          <button disabled={!serviceName || !login || !password || !url || !hasValidLength || !hasNumber || !hasLetter || !hasSpecialChar}>Cadastrar</button>
+          <button
+            disabled={!serviceName || !login || !password || !url || !hasValidLength || !hasNumber || !hasLetter || !hasSpecialChar}
+            onClick={() => {
+              const newService = {
+                'service-name': serviceName,
+                login: login,
+                password: password,
+                url: url
+              };
+              setServices([...services, newService]);
+              setIsFormVisible(false);
+              setIsButtonVisible(true);
+            }}
+          >Cadastrar</button>
           <button onClick={() => {
-            setIsFormVisible(false);
-            setIsButtonVisible(true);
+            setServiceName('');
+            setLogin('');
+            setPassword('');
+            setUrl('');
+            setIsFormVisible(true);
+            setIsButtonVisible(false);
           }}>Cancelar</button>
         </form>
       )}
-      {isButtonVisible && (
-        <button onClick={() => setIsButtonVisible(false)}>Cadastrar nova senha</button>
-      )}
+      {
+        isButtonVisible && (
+          <button onClick={() => {
+            setIsButtonVisible(false);
+            setIsFormVisible(true);
+          }}>Cadastrar nova senha</button>
+        )
+      }
+      {services.length === 0
+        ? <p>Nenhuma senha cadastrada</p>
+        : services.map((service, index) => (
+          <div key={index}>
+            <a href={service.url}>Nome do serviço: {service['service-name']}</a>
+            <p>Login: {service.login}</p>
+            <p>Senha: {service.password}</p>
+            <p>URL: {service.url}</p>
+          </div>
+        ))
+      }
     </>
   );
 }
