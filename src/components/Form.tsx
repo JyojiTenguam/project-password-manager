@@ -14,11 +14,18 @@ function Form() {
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
   const [url, setUrl] = useState("");
+  const [check, setCheck] = useState(false);
   const hasNumber = /\d/.test(password);
   const hasLetter = /[a-zA-Z]/.test(password);
   const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
   const hasValidLength = password.length >= 8 && password.length <= 16;
   const [services, setServices] = useState<{ 'service-name': string; login: string; password: string; url: string; }[]>([]);
+
+  function handleRemove(index) {
+    const newServices = services.filter((service, serviceIndex) => serviceIndex !== index);
+    setServices(newServices);
+  }
+
   return (
     <>
       {isFormVisible && (
@@ -86,15 +93,23 @@ function Form() {
           }}>Cadastrar nova senha</button>
         )
       }
+      <label htmlFor="hide-passwords">Esconder senhas</label>
+      <input type="checkbox" id="hide-passwords" onChange={data => setCheck(data.target.checked)} />
       {services.length === 0
         ? <p>Nenhuma senha cadastrada</p>
         : services.map((service, index) => (
           <div key={index}>
             <a href={service.url}>Nome do serviço: {service['service-name']}</a>
             <p>Login: {service.login}</p>
-            <p>Senha: {service.password}</p>
+            <p>Senha: {check ? '******' : service.password}</p>
             <p>URL: {service.url}</p>
+            <button data-testid="remove-btn" onClick={() => handleRemove(index)}>
+              Remover
+            </button>
+            <label htmlFor="">Esconder senhas</label>
+            <input type="checkbox" name="" id="" onChange={data => setCheck(data.target.checked)} />
           </div>
+
         ))
       }
     </>
