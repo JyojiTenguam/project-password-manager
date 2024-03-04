@@ -1,28 +1,51 @@
 import React, { useState } from 'react';
 
-type FormProps = {
-  handleInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void; // * funcao que recebe event e retorna nada
-  handleInputFocus: (event: React.FocusEvent<HTMLInputElement>) => void; // * funcao que recebe event e retorna nada
-  handleSendBtnClick: (event: React.MouseEvent<HTMLButtonElement>) => void; // * funcao que recebe event e retorna nada
-  validateForm: () => boolean; // * funcao que recebe nada e retorna true ou false (boolean)
+const validPassword = 'valid-password-check';
+const invalidPassword = 'invalid-password-check';
+
+const validateToMe = (
+  {
+    serviceName,
+    login,
+    password,
+    url,
+    hasValidLength,
+    hasNumber,
+    hasLetter,
+    hasSpecialChar,
+  }: {
+    serviceName: string,
+    login: string,
+    password: string,
+    url: string,
+    hasValidLength: boolean,
+    hasNumber: boolean,
+    hasLetter: boolean,
+    hasSpecialChar: boolean,
+  },
+) => {
+  return !serviceName || !login || !password || !url
+  || !hasValidLength || !hasNumber || !hasLetter || !hasSpecialChar;
 };
 
 function Form() {
   const [isButtonVisible, setIsButtonVisible] = useState(true);
   const [isFormVisible, setIsFormVisible] = useState(true);
-  const [serviceName, setServiceName] = useState("");
-  const [login, setLogin] = useState("");
-  const [password, setPassword] = useState("");
-  const [url, setUrl] = useState("");
+  const [serviceName, setServiceName] = useState('');
+  const [login, setLogin] = useState('');
+  const [password, setPassword] = useState('');
+  const [url, setUrl] = useState('');
   const [check, setCheck] = useState(false);
   const hasNumber = /\d/.test(password);
   const hasLetter = /[a-zA-Z]/.test(password);
   const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
   const hasValidLength = password.length >= 8 && password.length <= 16;
-  const [services, setServices] = useState<{ 'service-name': string; login: string; password: string; url: string; }[]>([]);
+  const [services, setServices] = useState<{
+    'service-name': string; login: string; password: string; url: string; }[]>([]);
 
-  function handleRemove(index) {
-    const newServices = services.filter((service, serviceIndex) => serviceIndex !== index);
+  function handleRemove(index: number) {
+    const newServices = services
+      .filter((service, serviceIndex) => serviceIndex !== index);
     setServices(newServices);
   }
 
@@ -31,39 +54,72 @@ function Form() {
       {isFormVisible && (
         <form>
           <label htmlFor="service-name">Nome do Serviço</label>
-          <input id="service-name" type="text" onChange={data => setServiceName(data.target.value)} />
+          <input
+            id="service-name"
+            type="text"
+            onChange={ (data) => setServiceName(data.target.value) }
+          />
 
           <label htmlFor="login">Login</label>
-          <input id="login" type="text" onChange={data => setLogin(data.target.value)} />
+          <input
+            id="login"
+            type="text"
+            onChange={ (data) => setLogin(data.target.value) }
+          />
 
           <label htmlFor="password">Senha</label>
-          <input id="password" type="password" onChange={data => setPassword(data.target.value)} />
+          <input
+            id="password"
+            type="password"
+            onChange={ (data) => setPassword(data.target.value) }
+          />
           <div>
-            <p className={hasValidLength ? 'valid-password-check' : 'invalid-password-check'}>
+            <p
+              className={ hasValidLength
+                ? validPassword : invalidPassword }
+            >
               Possuir 8 ou mais caracteres
             </p>
-            <p className={hasValidLength ? 'valid-password-check' : 'invalid-password-check'}>
+            <p
+              className={ hasValidLength
+                ? validPassword : invalidPassword }
+            >
               Possuir até 16 caracteres
             </p>
-            <p className={hasNumber && hasLetter ? 'valid-password-check' : 'invalid-password-check'}>
+            <p
+              className={ hasNumber && hasLetter
+                ? validPassword : invalidPassword }
+            >
               Possuir letras e números
             </p>
-            <p className={hasSpecialChar ? 'valid-password-check' : 'invalid-password-check'}>
+            <p
+              className={ hasSpecialChar
+                ? validPassword : invalidPassword }
+            >
               Possuir algum caractere especial
             </p>
           </div>
 
           <label htmlFor="url">URL</label>
-          <input id="url" type="text" onChange={data => setUrl(data.target.value)} />
+          <input id="url" type="text" onChange={ (data) => setUrl(data.target.value) } />
 
           <button
-            disabled={!serviceName || !login || !password || !url || !hasValidLength || !hasNumber || !hasLetter || !hasSpecialChar}
-            onClick={() => {
+            disabled={ validateToMe({
+              serviceName,
+              login,
+              password,
+              url,
+              hasValidLength,
+              hasNumber,
+              hasLetter,
+              hasSpecialChar,
+            }) }
+            onClick={ () => {
               const newService = {
                 'service-name': serviceName,
-                login: login,
-                password: password,
-                url: url
+                login,
+                password,
+                url,
               };
               setServices([...services, newService]);
               setServiceName('');
@@ -72,46 +128,76 @@ function Form() {
               setUrl('');
               setIsFormVisible(false);
               setIsButtonVisible(true);
-            }}
-          >Cadastrar</button>
+            } }
+          >
+            Cadastrar
+          </button>
 
-          <button onClick={() => {
-            setServiceName('');
-            setLogin('');
-            setPassword('');
-            setUrl('');
-            setIsFormVisible(false);
-            setIsButtonVisible(true);
-          }}>Cancelar</button>
+          <button
+            onClick={ () => {
+              setServiceName('');
+              setLogin('');
+              setPassword('');
+              setUrl('');
+              setIsFormVisible(false);
+              setIsButtonVisible(true);
+            } }
+          >
+            Cancelar
+          </button>
         </form>
       )}
       {
         isButtonVisible && (
-          <button onClick={() => {
-            setIsButtonVisible(false);
-            setIsFormVisible(true);
-          }}>Cadastrar nova senha</button>
+          <button
+            onClick={ () => {
+              setIsButtonVisible(false);
+              setIsFormVisible(true);
+            } }
+          >
+            Cadastrar nova senha
+          </button>
         )
       }
       <label htmlFor="hide-passwords">Esconder senhas</label>
-      <input type="checkbox" id="hide-passwords" onChange={data => setCheck(data.target.checked)} />
+      <input
+        type="checkbox"
+        id="hide-passwords"
+        onChange={ (data) => setCheck(data.target.checked) }
+      />
       {services.length === 0
         ? <p>Nenhuma senha cadastrada</p>
         : services.map((service, index) => (
-          <div key={index}>
-            <a href={service.url}>Nome do serviço: {service['service-name']}</a>
-            <p>Login: {service.login}</p>
-            <p>Senha: {check ? '******' : service.password}</p>
-            <p>URL: {service.url}</p>
-            <button data-testid="remove-btn" onClick={() => handleRemove(index)}>
+          <div key={ index }>
+            <a href={ service.url }>
+              Nome do serviço:
+              {service['service-name']}
+            </a>
+            <p>
+              Login:
+              {service.login}
+            </p>
+            <p>
+              Senha:
+              {check ? '******' : service.password}
+            </p>
+            <p>
+              URL:
+              {service.url}
+            </p>
+            <button data-testid="remove-btn" onClick={ () => handleRemove(index) }>
               Remover
             </button>
-            <label htmlFor="">Esconder senhas</label>
-            <input type="checkbox" name="" id="" onChange={data => setCheck(data.target.checked)} />
+            <label htmlFor="hiddenPassword">Esconder senhas</label>
+            <input
+              type="checkbox"
+              name=""
+              id="hiddenPassword"
+              onChange={ (data) => setCheck(data.target.checked) }
+            />
           </div>
 
-        ))
-      }
+        ))}
     </>
   );
 }

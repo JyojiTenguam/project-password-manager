@@ -26,6 +26,7 @@
     "@testing-library/user-event": "^13.5.0",
     "@trybe/eslint-config-frontend": "^1.11.3",
     "@vitejs/plugin-react-swc": "^3.1.0",
+    "eslint": "^8.57.0",
     "jsdom": "^21.1.0",
     "stylelint": "^14.16.1",
     "stylelint-order": "^5.0.0",
