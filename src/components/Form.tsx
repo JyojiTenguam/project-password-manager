@@ -148,17 +148,17 @@ function Form() {
         </form>
       )}
       {
-        isButtonVisible && (
-          <button
-            onClick={ () => {
-              setIsButtonVisible(false);
-              setIsFormVisible(true);
-            } }
-          >
-            Cadastrar nova senha
-          </button>
-        )
-      }
+  isButtonVisible && (
+    <button
+      onClick={ () => {
+        setIsButtonVisible(false);
+        setIsFormVisible(true);
+      } }
+    >
+      Cadastrar nova senha
+    </button>
+  )
+}
       <label htmlFor="hide-passwords">Esconder senhas</label>
       <input
         type="checkbox"
@@ -188,15 +188,7 @@ function Form() {
             <button data-testid="remove-btn" onClick={ () => handleRemove(index) }>
               Remover
             </button>
-            <label htmlFor="hiddenPassword">Esconder senhas</label>
-            <input
-              type="checkbox"
-              name=""
-              id="hiddenPassword"
-              onChange={ (data) => setCheck(data.target.checked) }
-            />
           </div>
-
         ))}
     </>
   );
