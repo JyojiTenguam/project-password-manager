@@ -42,6 +42,11 @@ function Form() {
   const hasValidLength = password.length >= 8 && password.length <= 16;
   const [services, setServices] = useState<{
     'service-name': string; login: string; password: string; url: string; }[]>([]);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
 
   function handleRemove(index: number) {
     const newServices = services
@@ -70,9 +75,16 @@ function Form() {
           <label htmlFor="password">Senha</label>
           <input
             id="password"
-            type="password"
+            type={ showPassword ? 'text' : 'password' }
             onChange={ (data) => setPassword(data.target.value) }
           />
+          <button
+            type="button"
+            data-testid="show-hide-form-password"
+            onClick={ toggleShowPassword }
+          >
+            {showPassword ? 'Esconder' : 'Mostrar'}
+          </button>
           <div>
             <p
               className={ hasValidLength
