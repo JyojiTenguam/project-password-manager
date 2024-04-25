@@ -1,31 +1,38 @@
 import React, { useState } from 'react';
+import Swal from 'sweetalert2';
 
 const validPassword = 'valid-password-check';
 const invalidPassword = 'invalid-password-check';
 
-const validateToMe = (
-  {
-    serviceName,
-    login,
-    password,
-    url,
-    hasValidLength,
-    hasNumber,
-    hasLetter,
-    hasSpecialChar,
-  }: {
-    serviceName: string,
-    login: string,
-    password: string,
-    url: string,
-    hasValidLength: boolean,
-    hasNumber: boolean,
-    hasLetter: boolean,
-    hasSpecialChar: boolean,
-  },
-) => {
-  return !serviceName || !login || !password || !url
-  || !hasValidLength || !hasNumber || !hasLetter || !hasSpecialChar;
+const validateToMe = ({
+  serviceName,
+  login,
+  password,
+  url,
+  hasValidLength,
+  hasNumber,
+  hasLetter,
+  hasSpecialChar,
+}: {
+  serviceName: string;
+  login: string;
+  password: string;
+  url: string;
+  hasValidLength: boolean;
+  hasNumber: boolean;
+  hasLetter: boolean;
+  hasSpecialChar: boolean;
+}) => {
+  return (
+    !serviceName
+    || !login
+    || !password
+    || !url
+    || !hasValidLength
+    || !hasNumber
+    || !hasLetter
+    || !hasSpecialChar
+  );
 };
 
 function Form() {
@@ -40,8 +47,14 @@ function Form() {
   const hasLetter = /[a-zA-Z]/.test(password);
   const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
   const hasValidLength = password.length >= 8 && password.length <= 16;
-  const [services, setServices] = useState<{
-    'service-name': string; login: string; password: string; url: string; }[]>([]);
+  const [services, setServices] = useState<
+  {
+    'service-name': string;
+    login: string;
+    password: string;
+    url: string;
+  }[]
+  >([]);
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const toggleShowPassword = () => {
@@ -49,9 +62,32 @@ function Form() {
   };
 
   function handleRemove(index: number) {
-    const newServices = services
-      .filter((service, serviceIndex) => serviceIndex !== index);
+    const newServices = services.filter(
+      (service, serviceIndex) => serviceIndex !== index,
+    );
     setServices(newServices);
+  }
+
+  function handleRegister() {
+    const newService = {
+      'service-name': serviceName,
+      login,
+      password,
+      url,
+    };
+    setServices([...services, newService]);
+    setServiceName('');
+    setLogin('');
+    setPassword('');
+    setUrl('');
+    setIsFormVisible(false);
+    setIsButtonVisible(true);
+
+    Swal.fire({
+      text: 'Serviço cadastrado com sucesso',
+      showConfirmButton: false,
+      timer: 1500,
+    });
   }
 
   return (
@@ -86,34 +122,30 @@ function Form() {
             {showPassword ? 'Esconder' : 'Mostrar'}
           </button>
           <div>
-            <p
-              className={ hasValidLength
-                ? validPassword : invalidPassword }
-            >
+            <p className={ hasValidLength ? validPassword : invalidPassword }>
               Possuir 8 ou mais caracteres
             </p>
-            <p
-              className={ hasValidLength
-                ? validPassword : invalidPassword }
-            >
+            <p className={ hasValidLength ? validPassword : invalidPassword }>
               Possuir até 16 caracteres
             </p>
             <p
-              className={ hasNumber && hasLetter
-                ? validPassword : invalidPassword }
+              className={
+                hasNumber && hasLetter ? validPassword : invalidPassword
+              }
             >
               Possuir letras e números
             </p>
-            <p
-              className={ hasSpecialChar
-                ? validPassword : invalidPassword }
-            >
+            <p className={ hasSpecialChar ? validPassword : invalidPassword }>
               Possuir algum caractere especial
             </p>
           </div>
 
           <label htmlFor="url">URL</label>
-          <input id="url" type="text" onChange={ (data) => setUrl(data.target.value) } />
+          <input
+            id="url"
+            type="text"
+            onChange={ (data) => setUrl(data.target.value) }
+          />
 
           <button
             disabled={ validateToMe({
@@ -126,21 +158,7 @@ function Form() {
               hasLetter,
               hasSpecialChar,
             }) }
-            onClick={ () => {
-              const newService = {
-                'service-name': serviceName,
-                login,
-                password,
-                url,
-              };
-              setServices([...services, newService]);
-              setServiceName('');
-              setLogin('');
-              setPassword('');
-              setUrl('');
-              setIsFormVisible(false);
-              setIsButtonVisible(true);
-            } }
+            onClick={ handleRegister }
           >
             Cadastrar
           </button>
@@ -159,30 +177,30 @@ function Form() {
           </button>
         </form>
       )}
-      {
-  isButtonVisible && (
-    <button
-      onClick={ () => {
-        setIsButtonVisible(false);
-        setIsFormVisible(true);
-      } }
-    >
-      Cadastrar nova senha
-    </button>
-  )
-}
+      {isButtonVisible && (
+        <button
+          onClick={ () => {
+            setIsButtonVisible(false);
+            setIsFormVisible(true);
+          } }
+        >
+          Cadastrar nova senha
+        </button>
+      )}
       <label htmlFor="hide-passwords">Esconder senhas</label>
       <input
         type="checkbox"
         id="hide-passwords"
         onChange={ (data) => setCheck(data.target.checked) }
       />
-      {services.length === 0
-        ? <p>Nenhuma senha cadastrada</p>
-        : services.map((service, index) => (
+      {services.length === 0 ? (
+        <p>Nenhuma senha cadastrada</p>
+      ) : (
+        services.map((service, index) => (
           <div key={ index }>
             <a href={ service.url }>
               Nome do serviço:
+              {' '}
               {service['service-name']}
             </a>
             <p>
@@ -201,7 +219,8 @@ function Form() {
               Remover
             </button>
           </div>
-        ))}
+        ))
+      )}
     </>
   );
 }
