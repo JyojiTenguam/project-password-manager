@@ -40,13 +40,13 @@ O projeto consiste na implementação das seguintes funcionalidades:
 1. Clone este repositório para o seu computador:
 
     ```bash
-    git clone git@github.com:JyojiTenguam/gerenciador-de-senhas.git
+    git clone git@github.com:JyojiTenguam/project-password-manager.git
     ```
 
 2. Navegue até o diretório do projeto:
 
     ```bash
-    cd gerenciador-de-senhas
+    cd project-password-manager
     ```
 
 3. Instale as dependências do projeto:
