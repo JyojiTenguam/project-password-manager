@@ -34,3 +34,42 @@ O projeto consiste na implementação das seguintes funcionalidades:
 
 9. **Mostrar/Ocultar Senha no Formulário**: Criar um botão para mostrar ou esconder a senha que está sendo digitada.
 10. **Alerta ao Cadastrar Serviço**: Exibir um alerta com a mensagem "Serviço cadastrado com sucesso" ao cadastrar um novo serviço.
+
+## Instruções de Instalação e Uso
+
+1. **Faça um Fork do Repositório**:
+   - Acesse o [repositório original do projeto](https://github.com/JyojiTenguam/project-password-manager) no GitHub e clique em **"Fork"** no canto superior direito para criar uma cópia do projeto na sua conta.
+
+2. **Clone o Repositório Forkado**:
+   - Após fazer o fork, copie o link do seu repositório e clone-o para o seu computador:
+
+    ```bash
+    git clone git@github.com:seu-usuario/project-password-manager.git
+    ```
+
+3. **Navegue até o Diretório do Projeto**:
+
+    ```bash
+    cd project-password-manager
+    ```
+
+4. **Instale as Dependências**:
+
+    ```bash
+    npm install
+    ```
+
+5. **Execute a Aplicação**:
+
+    ```bash
+    npm start
+    ```
+
+6. **Execute os Testes**:
+   - Execute os testes para verificar se tudo está funcionando corretamente:
+
+    ```bash
+    npm test
+    ```
+
+Substitua `"seu-usuario"` pelo seu nome de usuário no GitHub para que o link do fork seja correto.
